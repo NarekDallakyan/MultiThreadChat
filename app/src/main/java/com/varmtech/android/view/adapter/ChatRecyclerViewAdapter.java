@@ -1,6 +1,5 @@
 package com.varmtech.android.view.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +18,10 @@ import java.util.List;
 public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_ODD = 1;
     private static final int VIEW_TYPE_EVEN = 2;
-    private Context context;
     private List<ThreadModel> messageList = new ArrayList<>();
 
-    public ChatRecyclerViewAdapter(Context context) {
-        this.context = context;
-    }
-
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(int position) {// create even and odd view types
         int isEven = messageList.get(position).getValue();
         if (isEven % 2 == 0) {
             return VIEW_TYPE_EVEN;
@@ -39,7 +33,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = null;
-
+        // inflate corresponding layout
         if (viewType == VIEW_TYPE_EVEN) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_recycler_item_even, parent, false);
@@ -48,7 +42,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                     .inflate(R.layout.chat_recycler_item_odd, parent, false);
         }
         assert view != null;
-        return new ChatViewHolder(view);
+        return new ChatViewHolder(view);// if view inflated, create view holder object
     }
 
     @Override
@@ -80,6 +74,8 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (messageList != null) {
             messageList.add(threadModel);
             notifyItemChanged(getItemCount(), null);
+            // if threads completed, save message to file
+            // file path -> /data/data/com.varmtech.android/files/VarmTech.txt
             if (messageList.size() == 100) {
                 FileManager fileManager = new FileManager();
                 fileManager.writeToFile(messageList);
@@ -98,6 +94,7 @@ public class ChatRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         void bind(ThreadModel message, boolean isEven) {
+            // set data to view
             if (isEven) {
                 even.setText(message.getName().concat(" : ").concat(String.valueOf(message.getValue())));
             } else {

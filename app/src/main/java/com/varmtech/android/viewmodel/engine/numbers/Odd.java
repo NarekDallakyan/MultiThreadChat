@@ -24,16 +24,16 @@ public class Odd extends Thread {
     @Override
     public void run() {
         super.run();
-        for (int i = 1; i <= 100; i++) {
-            if (!running) {
-                break;
-            }
+        for (int i = 1; i <= 10000; i++) {
+            // if running is false, thread finished work
+            if (!running) return;
+
             if (i % 2 == 0) {
                 synchronized (lock) {
                     // notify data to view
                     mutableLiveData.postValue(new ThreadModel(Odd.class.getSimpleName(), i));
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(300);
                         lock.notify();
                         lock.wait();
                     } catch (Exception e) {

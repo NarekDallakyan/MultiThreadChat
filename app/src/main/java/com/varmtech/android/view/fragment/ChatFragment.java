@@ -3,6 +3,11 @@ package com.varmtech.android.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -10,24 +15,16 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.varmtech.android.R;
 import com.varmtech.android.model.ThreadModel;
 import com.varmtech.android.view.adapter.ChatRecyclerViewAdapter;
 import com.varmtech.android.viewmodel.ThreadCommunicationViewModel;
-import com.varmtech.android.viewmodel.engine.files.FileManager;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ChatFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = ChatFragment.class.getName();
-    public static final Object lock = new Object();
     // view
     private View view;
     private Button start, stop;
@@ -64,7 +61,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private void initChatAdapter() {
         gridLayoutManager = new GridLayoutManager(context, 1);
         recyclerView.setLayoutManager(gridLayoutManager);
-        adapter = new ChatRecyclerViewAdapter(context);
+        adapter = new ChatRecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
     }
 
@@ -89,13 +86,14 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    // observe view model
     private void listenReceivedNumber() {
         Observer<ThreadModel> observer = new Observer<ThreadModel>() {
             @Override
             public void onChanged(ThreadModel threadModel) {
                 Log.i(TAG, "onChanged: " + threadModel);
-                if(adapter !=null)
-                    adapter.add(threadModel);
+                if (adapter != null)
+                    adapter.add(threadModel);// put thread model to recycler view adapter
             }
         };
         viewModel.getMutableLiveData().observe(this, observer);

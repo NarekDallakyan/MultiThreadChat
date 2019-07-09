@@ -39,8 +39,6 @@ public class ThreadCommunicationViewModel extends AndroidViewModel {
                 threadOdd.start();
                 Log.i(TAG, "startChatWork: " + threadOdd.getName());
                 Log.i(TAG, "startChatWork: " + threadEven.getName());
-                FileManager fileManager = new FileManager();
-                //fileManager.createFile();
             }
         } else {
             // stop work
@@ -63,7 +61,9 @@ public class ThreadCommunicationViewModel extends AndroidViewModel {
             String stateEven = threadEven.getState().name();
             String stateOdd = threadEven.getState().name();
             return stateEven.toUpperCase().equals("TERMINATED") &&
-                    stateOdd.toUpperCase().equals("TERMINATED");
+                    stateOdd.toUpperCase().equals("TERMINATED") ||
+                    stateEven.toUpperCase().equals("WAITING") &&
+                            stateOdd.toUpperCase().equals("WAITING");
         } else {
             return true;
         }

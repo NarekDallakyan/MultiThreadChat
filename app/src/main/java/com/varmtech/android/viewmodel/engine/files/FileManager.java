@@ -34,7 +34,7 @@ public class FileManager {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(basePath + "/" + fileName))) {
             List<ThreadModel> list = new LinkedList<>(data);
             for (ThreadModel model : list) {
-                String value = model.getName().concat(" : ").concat(String.valueOf(model.getValue()) + "\n");
+                String value = model.getName().concat(" : ").concat(model.getValue() + "\n");
                 writer.write(value);
             }
             writer.write("\n\n -------------- Work Completed --------------");
